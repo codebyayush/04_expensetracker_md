@@ -33,9 +33,7 @@ const loginPage = () => {
       if (resp.ok) {
         const data = await resp.json();
         console.log("Logged in successfully:", data);
-        localStorage.setItem("token", data.idToken);
-        ctx.loginHandler();
-
+        ctx.loginHandler(data.idToken);
       } else {
         const data = await resp.json();
         console.log("Error fetching data", data.error.message);

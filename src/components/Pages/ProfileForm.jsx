@@ -1,13 +1,48 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useRef, useEffect } from "react";
 import { FaGithub } from "react-icons/fa";
 import { IoGlobeSharp } from "react-icons/io5";
 import ItemContext from "../../Store/ItemContext";
 
-const ProfileForm = () => {
+const ProfileForm = (props) => {
     const ctx = useContext(ItemContext)
 
   const nameRef = useRef();
   const urlRef = useRef();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      
+      const token = localStorage.getItem("token")
+      
+      const resp = await fetch("https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyCJO3nf1rN9288u3VAFDm0kC3eqhRSqPKc", {
+        method: "POST",
+        body: JSON.stringify({
+          idToken: token,
+        }),
+        headers: {"Content-Type": "application/json"}
+    })
+
+      if(resp.ok){
+        const data = await resp.json();
+        console.log("fetched data", data);
+
+        const userArr = data.users;
+
+        userArr.map((item) => {
+            nameRef.current.value = item.displayName;
+            urlRef.current.value = item.photoUrl;
+        })
+
+        props.handleProfile(true);
+
+      }else{
+        const data = await resp.json();
+        console.error("ERROR FETCHING DATA", data);
+      }
+  }
+    fetchData();
+}, [])
+
 
   const submitHandler = async (e) => {
         e.preventDefault();
@@ -45,7 +80,7 @@ const ProfileForm = () => {
         <div className=" mt-10 w-2/3 mr-2">
           <div className="m-2 flex justify-between text-xl font-medium">
             <h1>Contact Details</h1>
-            <button className=" border border-red-300 rounded-md p-1 font-medium " onClick={ctx.loginHandler}>
+            <button className=" border border-red-300 rounded-md p-1 font-medium " onClick={ctx.logoutHandler}>
               Cancel
             </button>
           </div>
