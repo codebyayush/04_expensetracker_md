@@ -116,7 +116,7 @@ const ProfileForm = (props) => {
               className=" border border-red-300 rounded-md p-1 font-medium "
               onClick={ctx.logoutHandler}
             >
-              Cancel
+              Cancel & logout
             </button>
           </div>
           <div className="mt-5">

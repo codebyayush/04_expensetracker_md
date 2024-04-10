@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import ProfileForm from "./ProfileForm";
+import ItemContext from "../../Store/ItemContext";
 
 const Home = (props) => {
+  const ctx = useContext(ItemContext);
   const [toggleProfileForm, setToggleProfileForm] = useState(false);
   const [completeProfile, setProfile] = useState(false);
 
@@ -23,6 +25,7 @@ const Home = (props) => {
         <h1 className=" font-medium self-center">
           Winners never quit. Quitters never win.
         </h1>
+        <div className="flex">
         <p className=" border-gray-400 bg-gray-200 p-1 rounded-3xl">
           {!completeProfile && "Your profile is incomplete."}
           {completeProfile && (
@@ -35,6 +38,8 @@ const Home = (props) => {
             <a href="#">Complete now</a>
           </button>
         </p>
+          {ctx.isLoggedIn && (<button className="italic border rounded-lg p-2 font-medium mr-2 ms-5 text-white bg-red-400" onClick={ctx.logoutHandler}>logout</button>)}
+        </div>
       </div>
       <hr className="border border-gray-600" />
       {toggleProfileForm && <ProfileForm handleProfile={() => profileHandler()}/>}
