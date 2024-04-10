@@ -1,6 +1,9 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
+import ItemContext from "../../Store/ItemContext";
 
 const loginPage = () => {
+    const ctx = useContext(ItemContext)
+
   const [isLogin, setIslogin] = useState(true);
   const emailRef = useRef();
   const passRef = useRef();
@@ -30,7 +33,9 @@ const loginPage = () => {
       if (resp.ok) {
         const data = await resp.json();
         console.log("Logged in successfully:", data);
-        alert("LOGGED IN SUCCESSFULLY")
+        localStorage.setItem("token", data.idToken);
+        ctx.loginHandler();
+
       } else {
         const data = await resp.json();
         console.log("Error fetching data", data.error.message);
