@@ -4,10 +4,10 @@ import ItemContext from './ItemContext';
 const ContextStore = ({children}) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+
     const isLoginHandler = () => {
         setIsLoggedIn((prevState) => !prevState);
     }
-
 
     const context = {
             isLoggedIn: isLoggedIn,
