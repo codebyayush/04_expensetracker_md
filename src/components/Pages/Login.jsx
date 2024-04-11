@@ -114,7 +114,6 @@ const loginPage = () => {
     }
   };
 
-
   return (
     <>
       <div className="flex justify-center align-content-center mt-28">

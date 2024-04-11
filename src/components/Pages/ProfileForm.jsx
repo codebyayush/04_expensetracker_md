@@ -108,7 +108,7 @@ const ProfileForm = (props) => {
 
   return (
     <>
-      <div className=" flex justify-end">
+      <div className="flex justify-end">
         <div className=" mt-10 w-2/3 mr-4">
           <div className="m-2 flex justify-between text-xl font-medium">
             <h1>Contact Details</h1>
@@ -174,6 +174,7 @@ const ProfileForm = (props) => {
           <hr className="border border-gray-400" />
         </div>
       </div>
+
     </>
   );
 };
