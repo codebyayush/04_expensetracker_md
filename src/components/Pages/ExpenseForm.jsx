@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const ExpenseForm = () => {
   const amountRef = useRef();
@@ -6,7 +6,31 @@ const ExpenseForm = () => {
   const catRef = useRef();
   const [expenseCart, setExpense] = useState([]);
 
-  const submitHandler = (e) => {
+useEffect(() => {
+
+    const fetchData = async () => {
+      const resp = await fetch(
+        `https://expense-tracker-481f2-default-rtdb.firebaseio.com/:cartItems.json`
+      );
+
+      if (resp.ok) {
+
+        const data = await resp.json();
+        console.log("data", data);
+
+        const newData = Object.values(data);
+        setExpense(newData)
+      
+    } else {
+        const data = resp.json();
+        console.log("ERROR FETCHING", data.error.message);
+      }
+  }
+  fetchData();
+
+}, [])
+
+  const submitHandler = async (e) => {
     e.preventDefault();
 
     const enteredAmount = amountRef.current.value;
@@ -16,17 +40,38 @@ const ExpenseForm = () => {
     if (enteredAmount === "" || enteredDesc === "" || enteredCategory === "") {
       return;
     } else {
-      const expenseObj = {
-        amount: enteredAmount,
-        desc: enteredDesc,
-        category: enteredCategory,
-      };
+      
+      const key = Math.random();
 
-      setExpense((prevState) => [...prevState, expenseObj]);
+      const resp = await fetch(
+        `https://expense-tracker-481f2-default-rtdb.firebaseio.com/:cartItems.json`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            key: key,
+            amount: enteredAmount,
+            desc: enteredDesc,
+            category: enteredCategory,
+          }),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      if (resp.ok) {
+        const newdata = {
+            amount: enteredAmount,
+            desc: enteredDesc,
+            category: enteredCategory
+        }
+        setExpense((prev) => [...prev, newdata])
+      } else {
+        const error = await resp.json();
+        console.log("ERROR ADDING", error);
+      }
     }
 
-        amountRef.current.value = "",
-      descRef.current.value = "",
+      amountRef.current.value = "";
+      descRef.current.value = "";
       catRef.current.value = "";
   };
 
@@ -47,6 +92,7 @@ const ExpenseForm = () => {
               id="money"
               className="w-2/3 border border-gray-400 rounded-md p-1"
               ref={amountRef}
+              required
             />
           </div>
           <div className="mt-3">
@@ -59,6 +105,7 @@ const ExpenseForm = () => {
               id="desc"
               className="w-2/3 border border-gray-400 rounded-md p-1"
               ref={descRef}
+              required
             />
           </div>
           <div className="mt-3">
@@ -71,6 +118,7 @@ const ExpenseForm = () => {
               id="category"
               className="w-2/3 border border-gray-400 rounded-md"
               ref={catRef}
+              required
             >
               <option value="food">Food</option>
               <option value="fuel">Fuel</option>
@@ -94,14 +142,16 @@ const ExpenseForm = () => {
                   <h1 className="flex font-medium">
                     Amount: &nbsp;<p className="text-red-500">{item.amount}</p>
                   </h1>
-                  
+
                   <h1 className="flex font-medium">
-                    Description: &nbsp;<p className="text-red-500">{item.desc}</p>
+                    Description: &nbsp;
+                    <p className="text-red-500">{item.desc}</p>
                   </h1>
                   <h1 className="flex font-medium">
-                    Category: &nbsp;<p className="text-red-500">{item.category}</p>
+                    Category: &nbsp;
+                    <p className="text-red-500">{item.category}</p>
                   </h1>
-                    <hr className="w-2/3 border mt-3 border-gray-500" />      
+                  <hr className="w-2/3 border mt-3 border-gray-500" />
                 </div>
               </>
             );

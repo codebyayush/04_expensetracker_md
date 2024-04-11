@@ -28,7 +28,7 @@ const Home = (props) => {
   return (
     <>
       <div className=" italic m-3 flex justify-between">
-        <h1 className=" font-medium self-center">
+        <h1 className=" font-medium self-center text-2xl">
           Winners never quit. Quitters never win.
         </h1>
         <div className="flex">

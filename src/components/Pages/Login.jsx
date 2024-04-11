@@ -45,6 +45,7 @@ const loginPage = () => {
       );
 
       if (resp.ok) {
+        localStorage.setItem('email', enteredEmail);
         const data = await resp.json();
         console.log("Logged in successfully:", data);
         ctx.loginHandler(data.idToken);
