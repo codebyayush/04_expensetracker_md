@@ -4,31 +4,36 @@ const ExpenseForm = () => {
   const amountRef = useRef();
   const descRef = useRef();
   const catRef = useRef();
+  const [editButtonToggle, setEditButton] = useState(false);
   const [expenseCart, setExpense] = useState([]);
 
-useEffect(() => {
-
+  useEffect(() => {
     const fetchData = async () => {
       const resp = await fetch(
         `https://expense-tracker-481f2-default-rtdb.firebaseio.com/:cartItems.json`
       );
 
       if (resp.ok) {
-
         const data = await resp.json();
         console.log("data", data);
 
-        const newData = Object.values(data);
-        setExpense(newData)
-      
-    } else {
+        const newData = [];
+
+        for (const [key, values] of Object.entries(data)) {
+          const id = key;
+          values.id = id;
+          newData.push(values);
+        }
+
+        console.log("new data: ", newData);
+        setExpense(newData);
+      } else {
         const data = resp.json();
         console.log("ERROR FETCHING", data.error.message);
       }
-  }
-  fetchData();
-
-}, [])
+    };
+    fetchData();
+  }, []);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -40,7 +45,6 @@ useEffect(() => {
     if (enteredAmount === "" || enteredDesc === "" || enteredCategory === "") {
       return;
     } else {
-      
       const key = Math.random();
 
       const resp = await fetch(
@@ -58,21 +62,107 @@ useEffect(() => {
       );
 
       if (resp.ok) {
+        const data = await resp.json();
+        const id = data.name;
+        console.log("id data", id);
         const newdata = {
-            amount: enteredAmount,
-            desc: enteredDesc,
-            category: enteredCategory
-        }
-        setExpense((prev) => [...prev, newdata])
+          id: `${id}`,
+          key: key,
+          amount: enteredAmount,
+          desc: enteredDesc,
+          category: enteredCategory,
+        };
+        setExpense((prev) => [...prev, newdata]);
       } else {
         const error = await resp.json();
         console.log("ERROR ADDING", error);
       }
     }
 
-      amountRef.current.value = "";
-      descRef.current.value = "";
-      catRef.current.value = "";
+    amountRef.current.value = "";
+    descRef.current.value = "";
+    catRef.current.value = "";
+  };
+
+  const putRequestHandler = async (e) => {
+    e.preventDefault();
+
+    const enteredAmount = amountRef.current.value;
+    const enteredDesc = descRef.current.value;
+    const enteredCategory = catRef.current.value;
+
+    const id = localStorage.getItem("editId");
+    const key = Math.random();
+
+    const newObj = {
+      key: key,
+      amount: enteredAmount,
+      desc: enteredDesc,
+      category: enteredCategory,
+    };
+
+    const resp = await fetch(
+      `https://expense-tracker-481f2-default-rtdb.firebaseio.com/:cartItems/${id}.json`,
+      {
+        method: "PUT",
+        body: JSON.stringify(newObj),
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    if (resp.ok) {
+      const data = await resp.json();
+      console.log("EDITED SUCCESSFULLY", data);
+      setEditButton(false);
+      const newdata = {
+        id: `${id}`,
+        key: key,
+        amount: enteredAmount,
+        desc: enteredDesc,
+        category: enteredCategory,
+      };
+      setExpense((prev) => [...prev, newdata]);
+    } else {
+      const error = await resp.json();
+      console.log("ERROR ", error);
+      setEditButton(false);
+    }
+
+    localStorage.removeItem("editId");
+
+    amountRef.current.value = "";
+    descRef.current.value = "";
+    catRef.current.value = "";
+  };
+
+  const editHandler = (amount, desc, category, id) => {
+    setExpense((prev) => prev.filter((item) => item.id !== id));
+
+    amountRef.current.value = amount;
+    descRef.current.value = desc;
+    catRef.current.value = category;
+
+    setEditButton(true);
+
+    localStorage.setItem("editId", id);
+  };
+
+  const deleteHandler = async (id) => {
+    const resp = await fetch(
+      `https://expense-tracker-481f2-default-rtdb.firebaseio.com/:cartItems/${id}.json`,
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    if (resp.ok) {
+      console.log("EXPENSE SUCCESSFULLY DELETED");
+      setExpense((prev) => prev.filter((item) => item.id !== id));
+    } else {
+      const error = resp.json();
+      console.log("Delete request failed", error);
+    }
   };
 
   return (
@@ -81,7 +171,7 @@ useEffect(() => {
         <h1 className="m-2 italic text-center font-medium text-3xl mr-80 text-purple-700 ">
           Expense Tracker
         </h1>
-        <form className="m-2" onSubmit={submitHandler}>
+        <form onSubmit={submitHandler}>
           <div className="">
             <label htmlFor="money" className="font-medium">
               Spent Amount
@@ -126,33 +216,67 @@ useEffect(() => {
               <option value="other">Other</option>
             </select>
           </div>
+          {!editButtonToggle && (
+            <button
+              type="submit"
+              className="mt-3 w-2/3 border border-red-400 p-1 bg-red-400 text-white rounded-md font-medium"
+            >
+              Add Expense
+            </button>
+          )}
+        </form>
+        {editButtonToggle && (
           <button
-            type="submit"
+            onClick={putRequestHandler}
             className="mt-3 w-2/3 border border-red-400 p-1 bg-red-400 text-white rounded-md font-medium"
           >
-            Add Expense
+            Edit Expense
           </button>
-          <hr className="w-2/3 border mt-3 border-gray-500" />
-        </form>
+        )}
+        <hr className="w-2/3 border mt-3 border-gray-500" />
         <div>
           {expenseCart.map((item) => {
             return (
               <>
-                <div className="m-3">
-                  <h1 className="flex font-medium">
-                    Amount: &nbsp;<p className="text-red-500">{item.amount}</p>
-                  </h1>
+                <div className="flex justify-between mr-96">
+                  <div className="m-3 ">
+                    <h1 className="flex font-medium">
+                      Amount: &nbsp;
+                      <p className="text-red-500">{item.amount}</p>
+                    </h1>
 
-                  <h1 className="flex font-medium">
-                    Description: &nbsp;
-                    <p className="text-red-500">{item.desc}</p>
-                  </h1>
-                  <h1 className="flex font-medium">
-                    Category: &nbsp;
-                    <p className="text-red-500">{item.category}</p>
-                  </h1>
-                  <hr className="w-2/3 border mt-3 border-gray-500" />
+                    <h1 className="flex font-medium">
+                      Description: &nbsp;
+                      <p className="text-red-500">{item.desc}</p>
+                    </h1>
+                    <h1 className="flex font-medium">
+                      Category: &nbsp;
+                      <p className="text-red-500">{item.category}</p>
+                    </h1>
+                  </div>
+                  <div className="mt-4 mb-2 -mr-7">
+                    <button
+                      onClick={() =>
+                        editHandler(
+                          item.amount,
+                          item.desc,
+                          item.category,
+                          item.id
+                        )
+                      }
+                      className=" p-2 rounded-md text-white bg-red-400 w-20 font-medium"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => deleteHandler(item.id)}
+                      className=" p-2 rounded-md text-white bg-red-700 ms-1 w-20 font-medium"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
+                <hr className="w-2/3 border border-gray-500" />
               </>
             );
           })}

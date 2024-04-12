@@ -35,10 +35,10 @@ const Home = (props) => {
         <p className=" border-gray-400 bg-gray-200 p-1 rounded-3xl max-w-96">
           {!completeProfile && "Your profile is incomplete."}
           {completeProfile && (
-            <>
+            <div className="font-medium">
               Your profile is <strong>64%</strong> completed. A complete profile
               has higher chances of landing a job.
-            </>
+            </div>
           )}
           <button className="italic text-red-500 " onClick={onClickHandler}>
             <a href="#">Complete now</a>

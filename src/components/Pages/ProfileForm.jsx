@@ -171,7 +171,7 @@ const ProfileForm = (props) => {
             </form>
           </div>
 
-          <hr className="border border-gray-400" />
+          <hr className="border border-gray-400 mt-3"/>
         </div>
       </div>
 
