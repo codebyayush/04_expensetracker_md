@@ -1,10 +1,16 @@
 import React, { useContext, useRef, useEffect } from "react";
 import { FaGithub } from "react-icons/fa";
 import { IoGlobeSharp } from "react-icons/io5";
-import ItemContext from "../../Store/ItemContext";
+import { useDispatch } from "react-redux";
+import { authActions } from "../../Store";
 
 const ProfileForm = (props) => {
-  const ctx = useContext(ItemContext);
+
+  const dispatch = useDispatch();
+
+  const logoutHandler = () => {
+      dispatch(authActions.logOut())
+  }
 
   const nameRef = useRef();
   const urlRef = useRef();
@@ -47,7 +53,6 @@ const ProfileForm = (props) => {
   const verifyEmailHandler = async () => {
     const token = localStorage.getItem("token");
 
-    
     try {
       const resp = await fetch(
         "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyCJO3nf1rN9288u3VAFDm0kC3eqhRSqPKc",
@@ -72,7 +77,6 @@ const ProfileForm = (props) => {
     } catch (error) {
         console.error("ERROR SENDING MAIL:", error)
     }
-
   };
 
   const submitHandler = async (e) => {
@@ -114,7 +118,7 @@ const ProfileForm = (props) => {
             <h1>Contact Details</h1>
             <button
               className=" border border-red-300 rounded-md p-1 font-medium "
-              onClick={ctx.logoutHandler}
+              onClick={logoutHandler}
             >
               Cancel & logout
             </button>
@@ -141,7 +145,6 @@ const ProfileForm = (props) => {
                 </div>
 
                 <IoGlobeSharp className="size-7" />
-
                 <div className="flex-1 flex items-center">
                   <label htmlFor="url" className="font-medium text-gray-700">
                     Profile photo url:

@@ -1,9 +1,15 @@
-import React, { useContext, useRef, useState } from "react";
-import ItemContext from "../../Store/ItemContext";
+import React, { useRef, useState } from "react";
 import SpinnerLoader from "../SpinnerLoader";
+import { useDispatch } from "react-redux";
+import { authActions } from "../../Store";
 
 const loginPage = () => {
-  const ctx = useContext(ItemContext);
+
+  const dispatch = useDispatch();
+
+  const loginHandler = (token) => {
+      dispatch(authActions.login(token))
+  }
 
   const [isLogin, setIslogin] = useState(true);
   const [passChange, setPass] = useState(false);
@@ -48,17 +54,15 @@ const loginPage = () => {
         localStorage.setItem('email', enteredEmail);
         const data = await resp.json();
         console.log("Logged in successfully:", data);
-        ctx.loginHandler(data.idToken);
+        loginHandler(data.idToken);
         setIsLoading(false)
       } else {
         setIsLoading(false)
         const data = await resp.json();
         console.log("Error fetching data", data.error.message);
         alert("ERROR:", data.error.message);
-        
       }
     } else if (!isLogin && passChange) {
-
       //send verification link
       setIsLoading(true)
       const resp = await fetch("https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyCJO3nf1rN9288u3VAFDm0kC3eqhRSqPKc", {
@@ -86,6 +90,7 @@ const loginPage = () => {
       const enteredPass = passRef.current.value;
       const enteredConfirmPass = confirmPassRef.current.value;
       if (enteredPass !== enteredConfirmPass) {
+        setIsLoading(false);
         return alert("Password must be same...");
       } else {
         const resp = await fetch(

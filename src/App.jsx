@@ -1,15 +1,14 @@
-import { useContext, useEffect } from "react";
-import ItemContext from "./Store/ItemContext";
 import Home from "./components/Pages/Home";
 import LoginPage from "./components/Pages/Login";
+import { useSelector } from "react-redux";
 
 function App() {
-  const ctx = useContext(ItemContext);
+  const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
 
   return (
         <>
-          {!ctx.isLoggedIn && <LoginPage />}
-          {ctx.isLoggedIn && <Home/>}
+          {!isLoggedIn && <LoginPage />}
+          {isLoggedIn && <Home/>}
         </>
   );
 }

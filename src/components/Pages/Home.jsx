@@ -1,10 +1,18 @@
 import React, { useContext, useState } from "react";
 import ProfileForm from "./ProfileForm";
-import ItemContext from "../../Store/ItemContext";
 import ExpenseForm from "./ExpenseForm";
+import { useDispatch, useSelector } from "react-redux";
+import { authActions } from "../../Store";
 
-const Home = (props) => {
-  const ctx = useContext(ItemContext);
+const Home = () => {
+
+  const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+  const dispatch = useDispatch()
+
+  const logoutHandler = () => {
+      dispatch(authActions.logOut())
+  }
+
   const [toggleProfileForm, setToggleProfileForm] = useState(false);
   const [completeProfile, setProfile] = useState(false);
   const [expenseToggle, setToggleExpense] = useState(false);
@@ -46,7 +54,7 @@ const Home = (props) => {
         </p>
           {}
           <button className="border border-purple-400 ms-5 p-1 rounded-md text-white font-medium italic bg-purple-400" onClick={expensePageHandler}>Expense</button>
-          {ctx.isLoggedIn && (<button className="italic border rounded-lg p-2 font-medium mr-2 ms-5 text-white bg-red-400" onClick={ctx.logoutHandler}>logout</button>)}
+          {isLoggedIn && (<button className="italic border rounded-lg p-2 font-medium mr-2 ms-5 text-white bg-red-400" onClick={logoutHandler}>logout</button>)}
         </div>
       </div>
       <hr className="border border-gray-600" />
