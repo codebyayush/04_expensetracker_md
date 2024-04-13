@@ -59,11 +59,32 @@ const expenseSlice = createSlice({
     }
 })
 
+const initialPremiumState = { darkModeToggle: false, darkButtonOpenClose: false, downloadButton: false }
+
+const premiumSlice = createSlice({
+        name: 'premium',
+        initialState: initialPremiumState,
+        reducers: {
+            darkModeToggler(state){
+                state.darkModeToggle = !state.darkModeToggle
+            },
+            darkButtonToggler(state){
+                state.darkButtonOpenClose = !state.darkButtonOpenClose
+            },
+            downloadToggler(state){
+                state.downloadButton = !state.downloadButton
+            }
+        }
+
+})
+
+
 export const expenseActions = expenseSlice.actions;
 export const authActions = authSlice.actions;
+export const premiumActions = premiumSlice.actions;
 
 const store = configureStore({
-  reducer: { auth: authSlice.reducer, expenses: expenseSlice.reducer },
+  reducer: { auth: authSlice.reducer, expenses: expenseSlice.reducer, premium: premiumSlice.reducer },
 });
 
 export default store;

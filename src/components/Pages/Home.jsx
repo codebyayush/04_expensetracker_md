@@ -2,12 +2,19 @@ import React, { useContext, useState } from "react";
 import ProfileForm from "./ProfileForm";
 import ExpenseForm from "./ExpenseForm";
 import { useDispatch, useSelector } from "react-redux";
-import { authActions } from "../../Store";
+import { authActions, expenseActions, premiumActions } from "../../Store";
 
 const Home = () => {
 
   const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+  const darkModeToggle = useSelector(state => state.premium.darkModeToggle);
+  const darkButton = useSelector(state => state.premium.darkButtonOpenClose);
+
   const dispatch = useDispatch()
+
+  const darkModeHandler = () => {
+    dispatch(premiumActions.darkModeToggler())
+  }
 
   const logoutHandler = () => {
       dispatch(authActions.logOut())
@@ -36,14 +43,14 @@ const Home = () => {
   return (
     <>
       <div className=" italic m-3 flex justify-between">
-        <h1 className=" font-medium self-center text-2xl">
+        <h1 className={!darkModeToggle ? " font-medium self-center text-2xl" : "text-white font-medium self-center text-2xl"}>
           Winners never quit. Quitters never win.
         </h1>
-        <div className="flex">
-        <p className=" border-gray-400 bg-gray-200 p-1 rounded-3xl max-w-96">
+        <div className="flex mt-2">
+        <p className={!darkModeToggle ? " border-gray-400 bg-gray-200 p-1 rounded-3xl max-w-96": "text-white border-gray-700 bg-gray-700 p-1 rounded-3xl max-w-96"}>
           {!completeProfile && "Your profile is incomplete."}
           {completeProfile && (
-            <div className="font-medium">
+            <div className={!darkModeToggle ? "font-medium" : "font-medium text-white"}>
               Your profile is <strong>64%</strong> completed. A complete profile
               has higher chances of landing a job.
             </div>
@@ -52,12 +59,13 @@ const Home = () => {
             <a href="#">Complete now</a>
           </button>
         </p>
-          {}
+{darkButton && <button className="border border-purple-400 ms-5 p-1 rounded-md text-white font-medium italic bg-purple-400" onClick={darkModeHandler}>Dark Mode</button>}
+        
           <button className="border border-purple-400 ms-5 p-1 rounded-md text-white font-medium italic bg-purple-400" onClick={expensePageHandler}>Expense</button>
           {isLoggedIn && (<button className="italic border rounded-lg p-2 font-medium mr-2 ms-5 text-white bg-red-400" onClick={logoutHandler}>logout</button>)}
         </div>
       </div>
-      <hr className="border border-gray-600" />
+      <hr className={!darkModeToggle ? "border border-gray-600" : "border border-blue-300"} />
       {toggleProfileForm && <ProfileForm handleProfile={() => profileHandler()}/>}
       {expenseToggle && <ExpenseForm/>}
     </>
