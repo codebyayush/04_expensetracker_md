@@ -1,8 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import ProfileForm from "./ProfileForm";
 import ExpenseForm from "./ExpenseForm";
 import { useDispatch, useSelector } from "react-redux";
-import { authActions, expenseActions, premiumActions } from "../../Store";
+import { authActions, premiumActions } from "../../Store";
 
 const Home = () => {
 

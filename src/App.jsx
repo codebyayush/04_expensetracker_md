@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React from 'react'
 import Home from "./components/Pages/Home";
 import LoginPage from "./components/Pages/Login";
 import { useSelector } from "react-redux";
@@ -9,6 +9,7 @@ function App() {
   return (
         <>
         <div className={`h-full ${darkModeToggle ? 'bg-gray-800 text-white' : 'bg-gray-100'}`}>
+          <p>welcome to the app page</p>
           {!isLoggedIn && <LoginPage />}
           {isLoggedIn && <Home/>}
         </div>

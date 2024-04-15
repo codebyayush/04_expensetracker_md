@@ -3,7 +3,7 @@ import SpinnerLoader from "../SpinnerLoader";
 import { useDispatch } from "react-redux";
 import { authActions } from "../../Store";
 
-const loginPage = () => {
+const LoginPage = () => {
 
   const dispatch = useDispatch();
 
@@ -227,4 +227,4 @@ const loginPage = () => {
   );
 };
 
-export default loginPage;
+export default LoginPage;
