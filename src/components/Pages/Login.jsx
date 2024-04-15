@@ -131,7 +131,7 @@ const LoginPage = () => {
           <form className="flex flex-col space-y-4" onSubmit={submitHandler}>
             <div>
               <label
-                for="email"
+                htmlhtmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
                 Email address
@@ -150,7 +150,7 @@ const LoginPage = () => {
             {!passChange && (
               <div>
                 <label
-                  for="password"
+                  htmlhtmlFor="password"
                   className="block text-sm font-medium text-gray-700"
                 >
                   Password
@@ -169,7 +169,7 @@ const LoginPage = () => {
             {!isLogin && !passChange ? (
               <div>
                 <label
-                  for="validatepassword"
+                  htmlFor="validatepassword"
                   className="block text-sm font-medium text-gray-700"
                 >
                   Confirm Password
