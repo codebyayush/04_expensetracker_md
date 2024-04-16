@@ -65,7 +65,7 @@ const Home = () => {
           {isLoggedIn && (<button className="italic border rounded-lg p-2 font-medium mr-2 ms-5 text-white bg-red-400" onClick={logoutHandler}>logout</button>)}
         </div>
       </div>
-      <hr className={!darkModeToggle ? "border border-gray-600" : "border border-blue-300"} />
+      <hr className={!darkModeToggle ? "border border-gray-600" : "border border-blue-300"} data-testid="test-hr"/>
       {toggleProfileForm && <ProfileForm handleProfile={() => profileHandler()}/>}
       {expenseToggle && <ExpenseForm/>}
     </>

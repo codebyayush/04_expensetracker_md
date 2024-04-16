@@ -128,11 +128,12 @@ const LoginPage = () => {
           <h1 className=" text-center text-2xl font-semibold">
             {isLogin ? "Login" : passChange ? "" : "Sign up"}
           </h1>
-          <form className="flex flex-col space-y-4" onSubmit={submitHandler}>
+          <form data-testid="form" className="flex flex-col space-y-4" onSubmit={submitHandler}>
             <div>
               <label
                 htmlhtmlFor="email"
                 className="block text-sm font-medium text-gray-700"
+                id="mail"
               >
                 Email address
               </label>
@@ -141,6 +142,7 @@ const LoginPage = () => {
                 type="email"
                 name="email"
                 id="email"
+                aria-labelledby="mail"
                 className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 ref={emailRef}
                 required
@@ -151,6 +153,7 @@ const LoginPage = () => {
               <div>
                 <label
                   htmlhtmlFor="password"
+                  id="pass"
                   className="block text-sm font-medium text-gray-700"
                 >
                   Password
@@ -159,6 +162,7 @@ const LoginPage = () => {
                   type="password"
                   name="password"
                   id="password"
+                  aria-labelledby="pass"
                   className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                   ref={passRef}
                   required

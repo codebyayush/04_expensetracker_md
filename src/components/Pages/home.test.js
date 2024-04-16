@@ -47,4 +47,5 @@ describe("renders home elements", () => {
     const darkModeButton = screen.queryByText("Dark Mode");
     expect(darkModeButton).not.toBeInTheDocument();
   });
+
 });
