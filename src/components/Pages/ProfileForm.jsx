@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { FaGithub } from "react-icons/fa";
 import { IoGlobeSharp } from "react-icons/io5";
 import { useDispatch } from "react-redux";
@@ -53,7 +53,6 @@ const ProfileForm = (props) => {
   const verifyEmailHandler = async () => {
     const token = localStorage.getItem("token");
 
-    
     try {
       const resp = await fetch(
         "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyCJO3nf1rN9288u3VAFDm0kC3eqhRSqPKc",
@@ -78,7 +77,6 @@ const ProfileForm = (props) => {
     } catch (error) {
         console.error("ERROR SENDING MAIL:", error)
     }
-
   };
 
   const submitHandler = async (e) => {
@@ -149,7 +147,6 @@ const ProfileForm = (props) => {
                 </div>
 
                 <IoGlobeSharp className="size-7" />
-
                 <div className="flex-1 flex items-center">
               <label htmlFor="url" className={`${darkModeToggle ? "font-medium text-white-700" : "font-medium text-gray-700"}`}>
                     Profile photo url:

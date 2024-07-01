@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import ProfileForm from './ProfileForm';
+import React, { useState } from "react";
+import ProfileForm from "./ProfileForm";
 import ExpenseForm from "./ExpenseForm";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions, premiumActions } from "../../Store";

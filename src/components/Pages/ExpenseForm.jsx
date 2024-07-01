@@ -1,11 +1,26 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { expenseActions, premiumActions } from "../../Store";
+import { CSVLink } from "react-csv";
 
 const ExpenseForm = () => {
+  const dispatch = useDispatch();
+  const expensesArr = useSelector((state) => state.expenses.expenseCart);
+  const totalAmount = useSelector((state) => state.expenses.totalAmount);
+  const darkToggle = useSelector((state) => state.premium.darkModeToggle);
+  const downloadMe = useSelector((state) => state.premium.downloadButton);
+
+  const darkButtonHandler = () => {
+    dispatch(premiumActions.downloadToggler());
+    dispatch(premiumActions.darkButtonToggler());
+  };
+
   const amountRef = useRef();
   const descRef = useRef();
   const catRef = useRef();
   const [editButtonToggle, setEditButton] = useState(false);
-  const [expenseCart, setExpense] = useState([]);
+
+  console.log("expense on mounting", expensesArr);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -15,22 +30,17 @@ const ExpenseForm = () => {
 
       if (resp.ok) {
         const data = await resp.json();
-        console.log("data", data);
-
-        const newData = [];
-
         for (const [key, values] of Object.entries(data)) {
           const id = key;
           values.id = id;
-          newData.push(values);
+          dispatch(expenseActions.addExpense(values));
         }
-
-        console.log("new data: ", newData);
-        setExpense(newData);
       } else {
         const data = resp.json();
         console.log("ERROR FETCHING", data.error.message);
       }
+
+      dispatch(expenseActions.totalExpense());
     };
     fetchData();
   }, []);
@@ -72,7 +82,9 @@ const ExpenseForm = () => {
           desc: enteredDesc,
           category: enteredCategory,
         };
-        setExpense((prev) => [...prev, newdata]);
+
+        dispatch(expenseActions.addExpense(newdata));
+        dispatch(expenseActions.totalExpense());
       } else {
         const error = await resp.json();
         console.log("ERROR ADDING", error);
@@ -121,7 +133,8 @@ const ExpenseForm = () => {
         desc: enteredDesc,
         category: enteredCategory,
       };
-      setExpense((prev) => [...prev, newdata]);
+      dispatch(expenseActions.addExpense(newdata));
+      dispatch(expenseActions.totalExpense());
     } else {
       const error = await resp.json();
       console.log("ERROR ", error);
@@ -136,13 +149,14 @@ const ExpenseForm = () => {
   };
 
   const editHandler = (amount, desc, category, id) => {
-    setExpense((prev) => prev.filter((item) => item.id !== id));
+    dispatch(expenseActions.removeExpense(id));
 
     amountRef.current.value = amount;
     descRef.current.value = desc;
     catRef.current.value = category;
 
     setEditButton(true);
+    dispatch(expenseActions.totalExpense());
 
     localStorage.setItem("editId", id);
   };
@@ -158,7 +172,8 @@ const ExpenseForm = () => {
 
     if (resp.ok) {
       console.log("EXPENSE SUCCESSFULLY DELETED");
-      setExpense((prev) => prev.filter((item) => item.id !== id));
+      dispatch(expenseActions.removeExpense(id));
+      dispatch(expenseActions.totalExpense());
     } else {
       const error = resp.json();
       console.log("Delete request failed", error);
@@ -364,7 +379,7 @@ const ExpenseForm = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

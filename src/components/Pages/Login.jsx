@@ -1,9 +1,15 @@
-import React, { useContext, useRef, useState } from "react";
-import ItemContext from "../../Store/ItemContext";
+import React, { useRef, useState } from "react";
 import SpinnerLoader from "../SpinnerLoader";
+import { useDispatch } from "react-redux";
+import { authActions } from "../../Store";
 
-const loginPage = () => {
-  const ctx = useContext(ItemContext);
+const LoginPage = () => {
+
+  const dispatch = useDispatch();
+
+  const loginHandler = (token) => {
+      dispatch(authActions.login(token))
+  }
 
   const [isLogin, setIslogin] = useState(true);
   const [passChange, setPass] = useState(false);
@@ -48,17 +54,15 @@ const loginPage = () => {
         localStorage.setItem('email', enteredEmail);
         const data = await resp.json();
         console.log("Logged in successfully:", data);
-        ctx.loginHandler(data.idToken);
+        loginHandler(data.idToken);
         setIsLoading(false)
       } else {
         setIsLoading(false)
         const data = await resp.json();
         console.log("Error fetching data", data.error.message);
         alert("ERROR:", data.error.message);
-        
       }
     } else if (!isLogin && passChange) {
-
       //send verification link
       setIsLoading(true)
       const resp = await fetch("https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyCJO3nf1rN9288u3VAFDm0kC3eqhRSqPKc", {
@@ -86,6 +90,7 @@ const loginPage = () => {
       const enteredPass = passRef.current.value;
       const enteredConfirmPass = confirmPassRef.current.value;
       if (enteredPass !== enteredConfirmPass) {
+        setIsLoading(false);
         return alert("Password must be same...");
       } else {
         const resp = await fetch(
@@ -123,11 +128,12 @@ const loginPage = () => {
           <h1 className=" text-center text-2xl font-semibold">
             {isLogin ? "Login" : passChange ? "" : "Sign up"}
           </h1>
-          <form className="flex flex-col space-y-4" onSubmit={submitHandler}>
+          <form data-testid="form" className="flex flex-col space-y-4" onSubmit={submitHandler}>
             <div>
               <label
-                for="email"
+                htmlhtmlFor="email"
                 className="block text-sm font-medium text-gray-700"
+                id="mail"
               >
                 Email address
               </label>
@@ -136,6 +142,7 @@ const loginPage = () => {
                 type="email"
                 name="email"
                 id="email"
+                aria-labelledby="mail"
                 className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 ref={emailRef}
                 required
@@ -145,7 +152,8 @@ const loginPage = () => {
             {!passChange && (
               <div>
                 <label
-                  for="password"
+                  htmlhtmlFor="password"
+                  id="pass"
                   className="block text-sm font-medium text-gray-700"
                 >
                   Password
@@ -154,6 +162,7 @@ const loginPage = () => {
                   type="password"
                   name="password"
                   id="password"
+                  aria-labelledby="pass"
                   className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                   ref={passRef}
                   required
@@ -164,7 +173,7 @@ const loginPage = () => {
             {!isLogin && !passChange ? (
               <div>
                 <label
-                  for="validatepassword"
+                  htmlFor="validatepassword"
                   className="block text-sm font-medium text-gray-700"
                 >
                   Confirm Password
@@ -222,4 +231,4 @@ const loginPage = () => {
   );
 };
 
-export default loginPage;
+export default LoginPage;

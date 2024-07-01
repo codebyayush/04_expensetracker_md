@@ -30,6 +30,7 @@ const expenseSlice = createSlice({
     name: 'expenses',
     initialState: initialExpenseState,
     reducers: {
+
         addExpense(state, action) {
             // checking if the same id already exist
             const existingExpenseIndex = state.expenseCart.findIndex(
@@ -45,6 +46,9 @@ const expenseSlice = createSlice({
             }
         },
 
+        }, 
+
+
         removeExpense(state, action){
             state.expenseCart = state.expenseCart.filter((prev) => prev.id !== action.payload)
             },
@@ -56,7 +60,7 @@ const expenseSlice = createSlice({
             state.totalAmount = grandTotal;
         }
     }
-})
+)
 
 const initialPremiumState = { darkModeToggle: false, darkButtonOpenClose: false, downloadButton: false }
 

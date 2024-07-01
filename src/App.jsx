@@ -1,24 +1,22 @@
-import { useContext, useEffect } from "react";
-import ItemContext from "./Store/ItemContext";
+import React from "react";
 import Home from "./components/Pages/Home";
 import LoginPage from "./components/Pages/Login";
+import { useSelector } from "react-redux";
 
 function App() {
-  const ctx = useContext(ItemContext);
-
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const darkModeToggle = useSelector((state) => state.premium.darkModeToggle);
   return (
-        <>
-<<<<<<< main
-          {!ctx.isLoggedIn && <LoginPage />}
-          {ctx.isLoggedIn && <Home/>}
-=======
-        <div className={`h-full ${darkModeToggle ? 'bg-gray-800 text-white' : 'bg-gray-100'}`}>
-        
-          {!isLoggedIn && <LoginPage />}
-          {isLoggedIn && <Home/>}
-        </div>``````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
->>>>>>> local
-        </>
+    <>
+      <div
+        className={`h-full ${
+          darkModeToggle ? "bg-gray-800 text-white" : "bg-gray-100"
+        }`}
+      >
+        {!isLoggedIn && <LoginPage />}
+        {isLoggedIn && <Home />}
+      </div>
+    </>
   );
 }
 
