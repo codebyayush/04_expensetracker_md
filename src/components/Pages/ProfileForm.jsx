@@ -1,10 +1,16 @@
 import React, { useContext, useRef, useEffect } from "react";
 import { FaGithub } from "react-icons/fa";
 import { IoGlobeSharp } from "react-icons/io5";
-import ItemContext from "../../Store/ItemContext";
+import { useDispatch } from "react-redux";
+import { authActions } from "../../Store";
 
 const ProfileForm = (props) => {
-  const ctx = useContext(ItemContext);
+
+  const dispatch = useDispatch();
+
+  const logoutHandler = () => {
+      dispatch(authActions.logOut())
+  }
 
   const nameRef = useRef();
   const urlRef = useRef();
@@ -114,7 +120,7 @@ const ProfileForm = (props) => {
             <h1>Contact Details</h1>
             <button
               className=" border border-red-300 rounded-md p-1 font-medium "
-              onClick={ctx.logoutHandler}
+              onClick={logoutHandler}
             >
               Cancel & logout
             </button>
@@ -126,7 +132,7 @@ const ProfileForm = (props) => {
                 <div className="flex-1 flex items-center">
                   <label
                     htmlFor="name"
-                    className="text-sm font-medium text-gray-700"
+                    className={`${darkModeToggle ? "font-medium text-white-700" : "font-medium text-gray-700"}`}
                   >
                     Full name:
                   </label>
@@ -134,7 +140,9 @@ const ProfileForm = (props) => {
                     type="text"
                     name="name"
                     id="name"
-                    className="flex-1 bg-white border border-gray-300 rounded-md ml-2"
+                    data-testid="namebox"
+                    placeholder="Enter full name"
+                    className={`${darkModeToggle ? "flex-1 bg-gray-800 border border-gray-500 rounded-md ml-2 p-1" : "flex-1 bg-white border border-gray-500 rounded-md ml-2 p-1"}`}
                     ref={nameRef}
                     required
                   />
@@ -143,22 +151,24 @@ const ProfileForm = (props) => {
                 <IoGlobeSharp className="size-7" />
 
                 <div className="flex-1 flex items-center">
-                  <label htmlFor="url" className="font-medium text-gray-700">
+              <label htmlFor="url" className={`${darkModeToggle ? "font-medium text-white-700" : "font-medium text-gray-700"}`}>
                     Profile photo url:
                   </label>
                   <input
                     type="text"
                     name="url"
                     id="url"
-                    className="flex-1 bg-white border border-gray-300 rounded-md ml-2"
+                    placeholder="Enter photo url"
+                    className={`${darkModeToggle ? "flex-1 bg-gray-800 border border-gray-500 rounded-md ml-2 p-1" : "flex-1 bg-white border border-gray-500 rounded-md ml-2 p-1"}`}
                     ref={urlRef}
                     required
                   />
                 </div>
               </div>
               <button
+                data-testid="submit"
                 type="submit"
-                className="mt-5 m-1 bg-red-500 text-white border border-red-400 rounded-md p-1 font-medium "
+                className="mt-5 m-1 bg-red-500 text-white border border-red-500 rounded-md p-1 font-medium "
               >
                 Update
               </button>
@@ -174,7 +184,6 @@ const ProfileForm = (props) => {
           <hr className="border border-gray-400 mt-3"/>
         </div>
       </div>
-
     </>
   );
 };

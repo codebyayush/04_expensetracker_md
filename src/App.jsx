@@ -8,8 +8,16 @@ function App() {
 
   return (
         <>
+<<<<<<< main
           {!ctx.isLoggedIn && <LoginPage />}
           {ctx.isLoggedIn && <Home/>}
+=======
+        <div className={`h-full ${darkModeToggle ? 'bg-gray-800 text-white' : 'bg-gray-100'}`}>
+        
+          {!isLoggedIn && <LoginPage />}
+          {isLoggedIn && <Home/>}
+        </div>``````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
+>>>>>>> local
         </>
   );
 }
