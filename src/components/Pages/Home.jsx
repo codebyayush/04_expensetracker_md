@@ -41,70 +41,72 @@ const Home = () => {
 
   return (
     <>
-      <div className=" italic flex justify-between p-2">
-        <h1
-          className={
-            !darkModeToggle
-              ? " font-medium self-center text-2xl"
-              : "text-white font-medium self-center text-2xl"
-          }
-        >
-          Winners never quit. Quitters never win.
-        </h1>
-        <div className="flex mt-2">
-          <p
-            className={
-              !darkModeToggle
-                ? " border-gray-400 bg-gray-200 p-1 rounded-3xl max-w-96"
-                : "text-white border-gray-700 bg-gray-700 p-1 rounded-3xl max-w-96"
-            }
-          >
-            {!completeProfile && "Your profile is incomplete."}
-            {completeProfile && (
-              <div
+      <div className="fixed w-full mb-20 backdrop-blur-sm">
+          <div className=" italic flex justify-between p-2">
+            <h1
+              className={
+                !darkModeToggle
+                  ? " font-medium self-center text-2xl"
+                  : "text-white font-medium self-center text-2xl"
+              }
+            >
+              Winners never quit. Quitters never win.
+            </h1>
+            <div className="flex mt-2">
+              <p
                 className={
-                  !darkModeToggle ? "font-medium" : "font-medium text-white"
+                  !darkModeToggle
+                    ? " border-gray-400 bg-gray-200 p-1 rounded-3xl max-w-96"
+                    : "text-white border-gray-700 bg-gray-700 p-1 rounded-3xl max-w-96"
                 }
               >
-                Your profile is <strong>64%</strong> completed. A complete
-                profile has higher chances of landing a job.
-              </div>
-            )}
-            <button className="italic text-red-500 " onClick={onClickHandler}>
-              <a href="#">Complete now</a>
-            </button>
-          </p>
-          {darkButton && (
-            <button
-              className=" ms-5 p-1 rounded-md text-white font-medium italic bg-purple-400"
-              onClick={darkModeHandler}
-            >
-              Dark Mode
-            </button>
-          )}
+                {!completeProfile && "Your profile is incomplete."}
+                {completeProfile && (
+                  <div
+                    className={
+                      !darkModeToggle ? "font-medium" : "font-medium text-white"
+                    }
+                  >
+                    Your profile is <strong>64%</strong> completed. A complete
+                    profile has higher chances of landing a job.
+                  </div>
+                )}
+                <button className="italic text-red-500 " onClick={onClickHandler}>
+                  <a href="#">Complete now</a>
+                </button>
+              </p>
+              {darkButton && (
+                <button
+                  className=" ms-5 p-1 rounded-md text-white font-medium italic bg-purple-400"
+                  onClick={darkModeHandler}
+                >
+                  Dark Mode
+                </button>
+              )}
 
-          <button
-            className=" ms-5 p-1 rounded-md text-white font-medium italic bg-purple-400"
-            onClick={expensePageHandler}
-          >
-            Expense
-          </button>
-          {isLoggedIn && (
-            <button
-              className="italic rounded-lg p-2 font-medium mr-2 ms-5 text-white bg-red-400"
-              onClick={logoutHandler}
-            >
-              logout
-            </button>
-          )}
-        </div>
+              <button
+                className=" ms-5 p-1 rounded-md text-white font-medium italic bg-purple-400"
+                onClick={expensePageHandler}
+              >
+                Expense
+              </button>
+              {isLoggedIn && (
+                <button
+                  className="italic rounded-lg p-2 font-medium mr-2 ms-5 text-white bg-red-400"
+                  onClick={logoutHandler}
+                >
+                  logout
+                </button>
+              )}
+            </div>
+          </div>
+          <hr
+            className={
+              !darkModeToggle ? "border border-gray-300" : "border border-blue-300"
+            }
+            data-testid="test-hr"
+          />
       </div>
-      <hr
-        className={
-          !darkModeToggle ? "border border-gray-600" : "border border-blue-300"
-        }
-        data-testid="test-hr"
-      />
       {toggleProfileForm && (
         <ProfileForm handleProfile={() => profileHandler()} />
       )}

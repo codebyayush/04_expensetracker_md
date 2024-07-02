@@ -173,7 +173,7 @@ const ExpenseForm = () => {
     if (resp.ok) {
       console.log("EXPENSE SUCCESSFULLY DELETED");
       dispatch(expenseActions.removeExpense(id));
-      dispatch(expenseActions.totalAmount());
+      dispatch(expenseActions.totalExpense());
     } else {
       const error = resp.json();
       console.log("Delete request failed", error);
@@ -182,8 +182,8 @@ const ExpenseForm = () => {
 
   return (
     <>
-      <div className=" flex justify-end">
-        <div className=" m-1  w-2/3">
+      <div className=" flex justify-end h-screen">
+        <div className=" m-1 mt-24  w-2/3">
           <h1
             className={
               !darkToggle
@@ -206,6 +206,7 @@ const ExpenseForm = () => {
               <br />
               <input
                 type="number"
+                min={1}
                 id="money"
                 className={
                   !darkToggle
