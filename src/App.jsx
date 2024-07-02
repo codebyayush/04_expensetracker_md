@@ -7,6 +7,7 @@ function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const darkModeToggle = useSelector((state) => state.premium.darkModeToggle);
   return (
+
     <>
       <div
         className={`h-full ${
@@ -17,6 +18,7 @@ function App() {
         {isLoggedIn && <Home />}
       </div>
     </>
+
   );
 }
 

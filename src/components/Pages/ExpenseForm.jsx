@@ -173,7 +173,7 @@ const ExpenseForm = () => {
     if (resp.ok) {
       console.log("EXPENSE SUCCESSFULLY DELETED");
       dispatch(expenseActions.removeExpense(id));
-      dispatch(expenseActions.totalExpense());
+      dispatch(expenseActions.totalAmount());
     } else {
       const error = resp.json();
       console.log("Delete request failed", error);

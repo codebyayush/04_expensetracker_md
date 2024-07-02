@@ -1,12 +1,15 @@
 import React, { useRef, useEffect } from "react";
 import { FaGithub } from "react-icons/fa";
 import { IoGlobeSharp } from "react-icons/io5";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../../Store";
+
 
 const ProfileForm = (props) => {
 
   const dispatch = useDispatch();
+  const darkModeToggle = useSelector((state) => state.premium.darkModeToggle);
+
 
   const logoutHandler = () => {
       dispatch(authActions.logOut())
